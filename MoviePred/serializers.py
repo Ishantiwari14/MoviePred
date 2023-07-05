@@ -12,10 +12,10 @@ class GenreSerializer(FlexFieldsModelSerializer):
             'movies': ('MoviePred.MovieSerializer', {'many': True})
         }
 
-class UserSerializer(FlexFieldsModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id','username']
+# class UserSerializer(FlexFieldsModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ['id','username']
 
 
 
@@ -23,15 +23,17 @@ class MovieSerializer(FlexFieldsModelSerializer):
     # reviews = ReviewSerializer(
     #     many = True,
     # )
-    # genre = GenreSerializer(many = True)
+    genre = serializers.PrimaryKeyRelatedField(
+        queryset=Genre.objects.all(),
+        many = True)
     class Meta:
         model = Movie
         fields = (
-            'id','title','description','date_released','movie_owner'
+            'id','title','description','date_released','movie_owner', 'genre'
         )
         expandable_fields = {
             'reviews': ('MoviePred.ReviewSerializer', {'many': True}),
-            'genre' : (GenreSerializer, {'many': True})
+            # 'genre' : (GenreSerializer, {'many': True})
         }
         read_only_fields = ('movie_owner',)
 
