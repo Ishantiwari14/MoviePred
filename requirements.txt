@@ -7,3 +7,4 @@ pandas==2.0.3
 django-cors-headers==4.1.0
 scikit-learn==1.2.1
 psycopg2-binary==2.9.6
+drf_yasg==1.21.6
