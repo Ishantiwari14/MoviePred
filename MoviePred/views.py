@@ -20,6 +20,8 @@ class MovieDetail(generics.RetrieveUpdateDestroyAPIView):
 class ReviewList(generics.ListCreateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,]
+    
     
 
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -66,4 +68,3 @@ class MovieReviewListCreate(generics.ListCreateAPIView):
         serializer.validated_data['movie'] = movie
 
         serializer.save(user=self.request.user, movie=movie, sentiment_pred=sentiment_pred)
-
