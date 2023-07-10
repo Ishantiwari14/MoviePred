@@ -14,7 +14,7 @@ class Genre(models.Model):
         return self.name
 
 class Movie(models.Model):
-    # movie_id = models.CharField(max_length=100, null=True)
+    movie_id = models.CharField(max_length=100, null=True)
     title = models.CharField(max_length=100)
     description = models.TextField(null=True)
     genre = models.ManyToManyField(Genre, related_name="movies",default=None)
@@ -38,7 +38,7 @@ class Review(models.Model):
     review_date = models.DateField(auto_now_add=True)
     movie = models.ForeignKey(Movie, related_name='reviews', on_delete=models.CASCADE, related_query_name='review')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews', related_query_name='review')
-    # movie_link = models.CharField(max_length=100, null=True)
+    movie_link = models.CharField(max_length=100, null=True)
     rating = models.DecimalField(max_digits=2, decimal_places=1, validators=[MinValueValidator(Decimal('0.0')), MaxValueValidator(Decimal('5.0'))])
     sentiment_pred = models.CharField(max_length=20, choices=options, default='positive')
 

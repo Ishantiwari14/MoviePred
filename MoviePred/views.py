@@ -58,8 +58,10 @@ class MovieReviewListCreate(generics.ListCreateAPIView):
         movie = generics.get_object_or_404(Movie, pk=movie_id)
 
         review_text = self.request.data.get('content', '')
-
+        user = self.request.user
+        critic_name = f"{user.first_name} {user.last_name}"
         sentiment_pred = sentiment_predictor(review_text)
+        serializer.validated_data['critic_name'] = critic_name
         serializer.validated_data['sentiment_pred'] = sentiment_pred
         serializer.validated_data['movie'] = movie
 

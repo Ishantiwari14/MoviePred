@@ -40,6 +40,6 @@ class ReviewSerializer(FlexFieldsModelSerializer):
     class Meta: 
         model = Review
         fields = (
-            'id', 'critic_name', 'content','rating','movie','review_date', 'sentiment_pred','user'
+            'id', 'content','rating','critic_name','movie','review_date', 'sentiment_pred','user'
         )
-        read_only_fields = ('id', 'sentiment_pred', 'movie', 'review_date','user')
+        read_only_fields = ('id', 'sentiment_pred', 'movie', 'review_date','user','critic_name')
