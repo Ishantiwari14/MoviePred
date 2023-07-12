@@ -146,7 +146,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 #     'http://localhost:3000'
 # ]
 
-CSRF_TRUSTED_ORIGINS = ['web-production-659f.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://web-production-659f.up.railway.app']
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
