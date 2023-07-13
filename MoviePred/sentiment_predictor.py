@@ -25,3 +25,7 @@ def sentiment_predictor(review):
     else:
         return 'Negative'
     
+def get_probabilities(review):
+    probas = lg_clf.predict_proba(tfidf_vzer.transform([regex_time(review)]))
+
+    return probas

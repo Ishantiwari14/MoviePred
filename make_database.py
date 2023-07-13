@@ -124,6 +124,11 @@ def sentiment_predictor(review):
     else:
         return 'Negative'
     
+def get_probabilities(review):
+    probas = lg_clf.predict_proba(tfidf_vzer.transform([regex_time(review)]))
+
+    return probas
+
 def create_review():
 
     with open('reviews_set.csv', encoding='utf-8') as file:
@@ -140,6 +145,9 @@ def create_review():
                 row[4] = None
             movie = Movie.objects.get(movie_id = row[1])
             sentiment_prediction = sentiment_predictor(row[5])
+            probas = get_probabilities(row[5])
+            prob_pos = probas[0][1]
+            prob_neg = probas[0][0]
             rating = generate_random_rating(row[3].lower())
             review = Review(
                 critic_name = row[2],
@@ -149,7 +157,9 @@ def create_review():
                 movie = movie,
                 sentiment_pred = sentiment_prediction,
                 movie_link = row[1],
-                user = user
+                user = user,
+                prob_pos = prob_pos,
+                prob_neg = prob_neg
             )
 
             review.save()

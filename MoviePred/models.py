@@ -42,7 +42,8 @@ class Review(models.Model):
     movie_link = models.CharField(max_length=100, null=True)
     rating = models.DecimalField(max_digits=2, decimal_places=1, validators=[MinValueValidator(Decimal('0.0')), MaxValueValidator(Decimal('5.0'))])
     sentiment_pred = models.CharField(max_length=20, choices=options, default='positive')
-
+    prob_pos = models.DecimalField(max_digits=4, decimal_places=3, null=True)
+    prob_neg = models.DecimalField(max_digits=4, decimal_places=3, null=True)
     def __str__(self):
         return self.content
     

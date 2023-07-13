@@ -1,7 +1,7 @@
 from rest_framework import generics,views,permissions, status
 from MoviePred.models import Movie,Review
 from .serializers import MovieSerializer, ReviewSerializer
-from MoviePred.sentiment_predictor import sentiment_predictor
+from MoviePred.sentiment_predictor import sentiment_predictor,get_probabilities
 from .owner_permission import IsOwnerOrReadOnly
 from django.core.exceptions import PermissionDenied
 from rest_framework.response import Response
@@ -72,11 +72,14 @@ class MovieReviewListCreate(generics.ListCreateAPIView):
         user = self.request.user
         critic_name = f"{user.first_name} {user.last_name}"
         sentiment_pred = sentiment_predictor(review_text)
+        probabilities = get_probabilities(review_text)
+        prob_pos = probabilities[0][1]
+        prob_neg = probabilities[0][0]
         serializer.validated_data['critic_name'] = critic_name
         serializer.validated_data['sentiment_pred'] = sentiment_pred
         serializer.validated_data['movie'] = movie
 
-        serializer.save(user=self.request.user, movie=movie, sentiment_pred=sentiment_pred)
+        serializer.save(user=self.request.user, movie=movie, sentiment_pred=sentiment_pred, prob_pos=prob_pos, prob_neg=prob_neg)
 
 
 class MovieRecommendationView(views.APIView):
