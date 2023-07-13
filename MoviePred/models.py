@@ -20,6 +20,7 @@ class Movie(models.Model):
     genre = models.ManyToManyField(Genre, related_name="movies",default=None)
     date_released = models.DateField(null=True,default=datetime.date.today)
     movie_owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='movies')
+    
     def __str__(self):
         return  self.title
 
