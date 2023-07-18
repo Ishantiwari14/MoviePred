@@ -1,6 +1,6 @@
 from rest_framework import generics,views,permissions, status
-from MoviePred.models import Movie,Review
-from .serializers import MovieSerializer, ReviewSerializer
+from MoviePred.models import Movie,Review, Genre
+from .serializers import MovieSerializer, ReviewSerializer, GenreSerializer
 from MoviePred.sentiment_predictor import sentiment_predictor,get_probabilities
 from .owner_permission import IsOwnerOrReadOnly
 from django.core.exceptions import PermissionDenied
@@ -20,7 +20,13 @@ class MovieList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,]
     def perform_create(self, serializer):
         serializer.save(movie_owner = self.request.user)
+
+
+class GenreList(generics.ListAPIView):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
     
+
 class MovieDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
