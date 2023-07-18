@@ -29,7 +29,7 @@ class MovieSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = Movie
         fields = (
-            'id','title','description','date_released','movie_owner', 'genre'
+            'id','title','description','date_released','movie_owner', 'genre','medium_poster_url', 'extra_small_poster_url'
         )
         expandable_fields = {
             'reviews': ('MoviePred.ReviewSerializer', {'many': True}),
