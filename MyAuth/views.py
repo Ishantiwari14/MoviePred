@@ -7,9 +7,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.views import View
+from django.contrib.auth import logout
 @login_required
 def user_profile(request):
     if request.method == 'POST':
+        print("LOGIN POST INIT")
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = UserProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
@@ -36,13 +38,8 @@ def register(request):
     else:
         form = UserRegistrationForm()
     return render(request, 'register.html', {'form': form})
-
-class LoginView(View):
-    def get(self, request):
-        form = AuthenticationForm()
-        return render(request, 'login.html', {'form': form})
-
-    def post(self, request):
+def login_view(request):
+    if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
@@ -50,8 +47,10 @@ class LoginView(View):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')  # Replace 'home' with the appropriate URL name for your home page
-        return render(request, 'login.html', {'form': form})
+                return redirect('index')  # Replace 'home' with the appropriate URL name for your home page
+    else:
+        form = AuthenticationForm()
+    return render(request, 'login.html', {'form': form})
 
 @login_required
 def change_password(request):
@@ -60,8 +59,11 @@ def change_password(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            return redirect('user_profile')
+            return redirect('index/')
     else:
         form = PasswordChangeForm(request.user)
     return render(request, 'change_password.html', {'form': form})
 
+def logout_view(request):
+    logout(request)
+    return redirect('index')

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movie List</title>
+    <style>
+       .card {
+    display: inline-block;
+    width: 200px;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+.card img {
+    max-width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+}
+
+.movie-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+form {
+    margin-bottom: 20px;
+}
+
+.movie-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card {
+    display: inline-block;
+    width: 200px;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+    </style>
+</head>
+<body>
+    <h1>Movie List</h1>
+
+    <form method="GET" action="{% url 'index' %}">
+        <input type="text" name="query" value="{{ query }}" placeholder="Search movies">
+        <button type="submit">Search</button>
+    </form>
+
+    <div class="movie-list">
+        {% for movie in movies %}
+            <div class="card">
+                <img src="{{ movie.medium_poster_url }}" alt="Movie Poster">
+                <h2>{{ movie.title }}</h2>
+                <p>{{ movie.description }}</p>
+                <!-- Add any other movie details you want to display -->
+            </div>
+        {% empty %}
+            <p>No movies found.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
+
+{% endblock %}

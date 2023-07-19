@@ -75,7 +75,7 @@ def run():
     with open('movies_set.csv') as file:
         reader = csv.reader(file)
         next(reader)
-        user = User.objects.get(username = 'admin')
+        user = User.objects.get(username = 'elaie')
         Movie.objects.all().delete()
 
         for row in reader:
@@ -136,7 +136,7 @@ def create_review():
         next(reader)
 
         Review.objects.all().delete()
-        user = User.objects.get(username = 'admin')
+        user = User.objects.get(username = 'elaie')
         for row in reader:
             print(row)
             if check_date_format(row[4]):

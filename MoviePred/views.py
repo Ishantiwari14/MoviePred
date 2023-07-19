@@ -11,7 +11,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from django.contrib.auth.models import User
 from collections import defaultdict
 import numpy as np
-
+from django.shortcuts import render
+from random import sample
 # from MoviePred.recommender import find_similar_users
 
 class MovieList(generics.ListCreateAPIView):
@@ -100,3 +101,20 @@ class MovieRecommendationView(views.APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except UserProfile.DoesNotExist:
             return Response([]);
+
+def index(request):
+    query = request.GET.get('query')
+
+    if query:
+        # Perform a case-insensitive search for movies that contain the query in their title
+        movies = Movie.objects.filter(title__icontains=query)
+    else:
+        # Get 5 random movies if no search query is provided
+        movies = sample(list(Movie.objects.all()), 5)
+
+    context = {
+        'movies': movies,
+        'query': query
+    }
+
+    return render(request, 'index.html', context)
