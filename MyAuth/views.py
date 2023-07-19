@@ -34,7 +34,7 @@ def register(request):
         if form.is_valid():
             print("USER REGISTERED")
             form.save()
-            return redirect('login.html')  # Change 'login' to the appropriate URL name for your login view
+            return redirect('login')  # Change 'login' to the appropriate URL name for your login view
     else:
         form = UserRegistrationForm()
     return render(request, 'register.html', {'form': form})
@@ -67,3 +67,21 @@ def change_password(request):
 def logout_view(request):
     logout(request)
     return redirect('index')
+
+@login_required
+def profile(request):
+    user_profile = request.user.profile
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+
+    else:
+        form = UserProfileForm(instance=user_profile)
+
+    context = {
+        'form': form
+    }
+    return render(request, 'profile.html', context)

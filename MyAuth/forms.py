@@ -36,3 +36,7 @@ class UserRegistrationForm(UserCreationForm):
             profile.save()
         return user
 
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['phone_number', 'profile_picture', 'genre_preferences']

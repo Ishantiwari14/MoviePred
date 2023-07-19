@@ -33,12 +33,19 @@
             {% empty %}
                 <p>No reviews available.</p>
             {% endfor %}
-
+            <h2>RECOMMEND FOR YOU</h2>
             <!-- Add/Edit Review (If user is logged in) -->
             {% if user.is_authenticated %}
-                <div class="add-review">
-                    <!-- Add/Edit review form -->
-                </div>
+            <div class="add-review">
+                <h2>Add/Edit Review</h2>
+                <form method="POST" action="{% url 'add_review' movie.pk %}">
+                    {% csrf_token %}
+                    <!-- Add your review form fields here -->
+                    <textarea name="content" placeholder="Your review"></textarea>
+                    <input type="number" name="rating" min="0" max="5" step="0.1" placeholder="Rating">
+                    <button type="submit">Submit Review</button>
+                </form>
+            </div>
             {% endif %}
         </div>
     </div>

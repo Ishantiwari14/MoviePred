@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Add a New Movie</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {% if form.instance.medium_poster_url %}
+      <p>Medium Poster URL: {{ form.instance.medium_poster_url }}</p>
+    {% endif %}
+    {% if form.instance.extra_small_poster_url %}
+      <p>Extra Small Poster URL: {{ form.instance.extra_small_poster_url }}</p>
+    {% endif %}
+    <input type="submit" value="Save">
+  </form>
+{% endblock %}

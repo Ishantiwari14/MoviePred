@@ -12,5 +12,7 @@ urlpatterns = [
     path("recommendations/", views.MovieRecommendationView.as_view()),
     path('', views.index, name='index'),
     path('movie/<int:pk>/', views.movie_details, name='movie_details'),
+    path('movie/<int:pk>/add_review/', views.add_review, name='add_review'),
+    path('add-movie/', views.add_movie, name='add_movie'),
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)

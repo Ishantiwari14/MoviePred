@@ -66,6 +66,22 @@ form {
         {% empty %}
             <p>No movies found.</p>
         {% endfor %}
+
+        {% if user.is_authenticated %}
+            <!-- Display additional list of movies for logged-in users -->
+            {% for moviees in recommend %}
+                <a href="{% url 'movie_details' moviees.pk %}">
+                    <div class="card">
+                        <img src="{{ logged_in_movie.medium_poster_url }}" alt="Movie Poster">
+                        <h2>{{ moviees.title }}</h2>
+                        <p>{{ moviees.description }}</p>
+                        <!-- Add any other movie details you want to display -->
+                    </div>
+                </a>
+            {% empty %}
+                <p>No additional movies found for logged-in users.</p>
+            {% endfor %}
+        {% endif %}
     </div>
 </body>
 </html>
