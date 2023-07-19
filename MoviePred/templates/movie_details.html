@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movie Details</title>
+    <link rel="stylesheet" href="path/to/imdb-styles.css">
+    <style>
+        /* Custom styles for the movie details page */
+        /* Add your own custom styles here */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Movie Details Section -->
+        <div class="movie-details">
+            <h1>{{ movie.title }}</h1>
+            <img src="{{ movie.medium_poster_url }}" alt="Movie Poster">
+            <p>{{ movie.description }}</p>
+            <!-- Display other movie details here -->
+        </div>
+
+        <!-- Reviews Section -->
+        <div class="reviews">
+            <h2>Reviews</h2>
+            <!-- Loop through the reviews for the movie -->
+            {% for review in movie.reviews.all %}
+                <div class="review-card">
+                    <p>{{ review.content }}</p>
+                    <!-- Display other review details here -->
+                </div>
+            {% empty %}
+                <p>No reviews available.</p>
+            {% endfor %}
+
+            <!-- Add/Edit Review (If user is logged in) -->
+            {% if user.is_authenticated %}
+                <div class="add-review">
+                    <!-- Add/Edit review form -->
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
+
+
+{% endblock %}

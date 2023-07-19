@@ -55,12 +55,14 @@ form {
 
     <div class="movie-list">
         {% for movie in movies %}
+        <a href="{% url 'movie_details' movie.pk %}">
             <div class="card">
                 <img src="{{ movie.medium_poster_url }}" alt="Movie Poster">
                 <h2>{{ movie.title }}</h2>
                 <p>{{ movie.description }}</p>
                 <!-- Add any other movie details you want to display -->
             </div>
+        </a>
         {% empty %}
             <p>No movies found.</p>
         {% endfor %}

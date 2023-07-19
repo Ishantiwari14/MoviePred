@@ -13,6 +13,7 @@ from collections import defaultdict
 import numpy as np
 from django.shortcuts import render
 from random import sample
+from django.shortcuts import render, get_object_or_404
 # from MoviePred.recommender import find_similar_users
 
 class MovieList(generics.ListCreateAPIView):
@@ -118,3 +119,14 @@ def index(request):
     }
 
     return render(request, 'index.html', context)
+
+def movie_details(request, pk):
+    # Get the movie with the specified movie_id
+    movie = get_object_or_404(Movie, pk=pk)
+
+    context = {
+        'movie': movie,
+        'user': request.user
+    }
+
+    return render(request, 'movie_details.html', context)
