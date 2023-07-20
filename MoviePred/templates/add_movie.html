@@ -1,16 +1,155 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
-  <h2>Add a New Movie</h2>
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    {% if form.instance.medium_poster_url %}
+
+<head>
+  <style>
+    body {
+      background-image: url('{% static "22.jpg" %}');
+      background-size: cover;
+      background-repeat: no-repeat;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
+    .row {
+      display: flex;
+    }
+
+    .column {
+      flex: 1;
+      /* This will make each column take up equal space. Adjust as needed. */
+      padding: 10px;
+
+    }
+
+    form {
+      width: 400px;
+      margin: 0 auto;
+
+    }
+
+    .form-field {
+      margin-bottom: 20px;
+    }
+
+    .form-field label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #f3f3f3;text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); 
+    }
+
+    .form-field input[type="text"],
+    .form-field input[type="url"],
+    .form-field textarea,
+    .form-field select {
+      width: 80%;
+      padding: 10px;
+      /* border: 1px solid #4e4e4e; */
+      border-radius: 5px;
+      font-size: 16px;
+      color: black;
+      background-color: #cac8c8;
+    }
+
+    .form-field select {
+      appearance: none;
+    }
+
+    .form-field select::-ms-expand {
+      display: none;
+    }
+
+    .form-field input[type="submit"] {
+      background-color: #E50914;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      margin-left: 300px;
+    }
+
+    .form-field input[type="submit"]:hover {
+      background-color: #880a10;
+    }
+
+    h2 {
+      color: #E50914;
+      margin-bottom: 20px;
+      font-size: 30px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); 
+    }
+
+    .messages {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      background-color: #f0f0f0;
+      font-size: 16px;
+      color: #333;
+    }
+
+    /* Media Query for smaller screens */
+    @media (max-width: 600px) {
+      form {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<div class="row">
+  <div class="column">
+  </div>
+  <div class="column" style="      padding: 20px;
+  border-radius: 10px;
+  background-color: transparent;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 10px #808080;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);">
+      <h2>Add a New Movie</h2>
+      <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="form-field">
+        <label for="{{ form.movie_id.id_for_label }}">Movie ID:</label>
+        {{ form.movie_id }}
+      </div>
+
+      <div class="form-field">
+        <label for="{{ form.title.id_for_label }}">Title:</label>
+        {{ form.title }}
+      </div>
+
+      <div class="form-field">
+        <label for="{{ form.description.id_for_label }}">Description:</label>
+        {{ form.description }}
+      </div>
+
+      <div class="form-field">
+        <label for="{{ form.genre.id_for_label }}">Genre:</label>
+        {{ form.genre }}
+      </div>
+
+      <div class="form-field">
+        <label for="{{ form.date_released.id_for_label }}">Date Released:</label>
+        {{ form.date_released }}
+      </div>
+
+      {% if form.instance.medium_poster_url %}
       <p>Medium Poster URL: {{ form.instance.medium_poster_url }}</p>
-    {% endif %}
-    {% if form.instance.extra_small_poster_url %}
+      {% endif %}
+      {% if form.instance.extra_small_poster_url %}
       <p>Extra Small Poster URL: {{ form.instance.extra_small_poster_url }}</p>
-    {% endif %}
-    <input type="submit" value="Save">
+      {% endif %}
+      <div class="form-field">
+      <input type="submit" value="Save">
+      </div>
+  </div>
   </form>
+</div>
 {% endblock %}

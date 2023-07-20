@@ -134,7 +134,7 @@ def index(request):
         movies = Movie.objects.filter(title__icontains=query)
     else:
         # Get 5 random movies if no search query is provided
-        movies = sample(list(Movie.objects.all()), 5)
+        movies = sample(list(Movie.objects.all()), 10)
         print(movies)
     context = {
         'movies': movies,
@@ -143,14 +143,33 @@ def index(request):
     }
 
     return render(request, 'index.html', context)
-
+from django.db.models import Sum
 def movie_details(request, pk):
     # Get the movie with the specified movie_id
     movie = get_object_or_404(Movie, pk=pk)
+    reviews = Review.objects.filter(movie=movie)
+    # Calculate the number of positive and negative sentiments
+    sentiment_counts = reviews.values('sentiment_pred')
 
+    total_positive = 0
+    total_negative = 0
+
+    for sentiment in sentiment_counts:
+        print("sentiment['sentiment_pred']")
+        print(sentiment['sentiment_pred'])
+        if sentiment['sentiment_pred'] == 'Positive':
+            total_positive = total_positive + 1
+        elif sentiment['sentiment_pred'] == 'Negative':
+            total_negative = total_negative + 1
+    print(total_positive)
+    print(total_negative)
+    overall_sentiment = 'positive' if total_positive > total_negative else 'negative'
+    print(overall_sentiment)
     context = {
         'movie': movie,
-        'user': request.user
+        'user': request.user,
+        'total_positive': total_positive, 
+        'total_negative': total_negative
     }
 
     return render(request, 'movie_details.html', context)

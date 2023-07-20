@@ -3,37 +3,254 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Movie Details</title>
     <link rel="stylesheet" href="path/to/imdb-styles.css">
     <style>
-        /* Custom styles for the movie details page */
-        /* Add your own custom styles here */
+        .bar-graph {
+            display: flex;
+            height: 20px;
+            /* Adjust the height of the bars as needed */
+            background-color: #f0f0f0;
+            /* Adjust the background color of the bar graph */
+        }
+        
+        .bar {
+            height: 100%;
+            text-align: center;
+            font-size: 12px;
+            line-height: 20px;
+            color: #fff;
+        }
+        
+        .positive-bar {
+            flex-basis: {{ review.prob_pos|floatformat:"0" }}%;
+            background-color: #4caf50;
+            /* Adjust the color of the positive bar */
+        }
+        
+        .negative-bar {
+            flex-basis: {{ review.prob_neg|floatformat:"0" }}%;
+            background-color: #e50914;
+            /* Adjust the color of the negative bar */
+        }
+        .row {
+            display: flex;
+        }
+
+        .column {
+            flex: 1;
+            /* This will make each column take up equal space. Adjust as needed. */
+            padding: 10px;
+
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-image: linear-gradient(to bottom, #000000, #303330);
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: #333;
+            /* Dark background color */
+            color: #fff;
+            /* Light text color */
+            padding: 20px;
+            border: 1.5px solid #444;
+            /* Darker border color */
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 10px #808080;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        .movie-details {
+            text-align: center;
+            /* Center the content inside the .movie-details div */
+            margin-bottom: 30px;
+        }
+
+        /* Style for the movie title */
+        .movie-details h1 {
+            position: relative;
+            font-size: 50px;
+            margin: 0;
+            padding: 15px 15px;
+            color: #E50914;
+            display: inline-block;
+            border-radius: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+            /* Adding a text-shadow for depth */
+            /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); Adding a box-shadow for a floating effect */
+        }
+
+
+
+        /* Style for the movie description */
+        .movie-details p {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Style for the reviews section */
+        .reviews {
+            border-bottom: 1px solid #ccc;
+            padding-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        .reviews h2 {
+            color: #E50914;
+        }
+
+        /* Style for review cards */
+        .review-card {
+            padding: 15px;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 15px;
+            background-color: #444;
+            /* Dark background color for reviews */
+            border-radius: 5px;
+        }
+
+        /* Style for review card user name */
+        .review-card p {
+            color: #E50914;
+            /* Red color for user name */
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+        /* Style for review card content and details */
+        .review-card p:not(.movie-review) {
+            color: #fff;
+            margin: 5px 0;
+        }
+
+        /* Style for the "Add/Edit Review" section */
+        .add-review {
+            margin-top: 30px;
+        }
+
+        .add-review h2 {
+            font-size: 24px;
+            color: #fff;
+            margin: 0 0 15px;
+        }
+
+        .add-review form {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .add-review textarea,
+        .add-review input[type="number"],
+        .add-review button {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #302f2f;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .add-review button {
+            background-color: #E50914;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-review button:hover {
+            background-color: #8b080f;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+        }
+
+        .bar-graph {
+            display: flex;
+            height: 20px;
+            /* Adjust the height of the bars as needed */
+            background-color: #f0f0f0;
+            /* Adjust the background color of the bar graph */
+        }
+
+        .bar {
+            height: 100%;
+            flex: 1;
+        }
+
+        .filled-bar {
+            background-color: #4caf50;
+            /* Adjust the color of the filled bars */
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- Movie Details Section -->
         <div class="movie-details">
-            <h1>{{ movie.title }}</h1>
-            <img src="{{ movie.medium_poster_url }}" alt="Movie Poster">
-            <p>{{ movie.description }}</p>
-            <!-- Display other movie details here -->
-        </div>
 
+            <h1>{{ movie.title }}</h1>
+            <div class="row">
+                <div class="column">
+                    <img src="{{ movie.medium_poster_url }}" alt="Movie Poster">
+                </div>
+                <div class="column" style="margin-top:30px ;">
+                    <h2> Movie's Description</h2>
+                    <p>{{ movie.description }}</p>
+                </div>
+                <!-- Display other movie details here -->
+            </div>
+        </div>
         <!-- Reviews Section -->
         <div class="reviews">
             <h2>Reviews</h2>
+            <div class="sentiment-chart-container">
+                <canvas id="sentimentChart" width="400" height="400"></canvas>
+            </div>
             <!-- Loop through the reviews for the movie -->
             {% for review in movie.reviews.all %}
-                <div class="review-card">
-                    <p>{{ review.content }}</p>
-                    <!-- Display other review details here -->
+            <div class="review-card">
+                <p style="font-family:Georgia, 'Times New Roman', Times, serif">{{ review.user }}</p>
+                <div class="new-row" style="margin-left: 20px;">
+                    <p>Movie Review: {{ review.content }}</p>
+                    <div class="rating">
+                        <p>Rating: {{ review.rating }}</p>
+                       
+                    </div>
+                    <div class="bar-graph">
+                        <div class="bar positive-bar" style="width: {{ review.prob_pos|floatformat:"0" }}%;">{{ review.prob_pos }}</div>
+                    </div>
+                    <div class="bar-graph">
+                        <div class="bar negative-bar" style="width: {{ review.prob_neg|floatformat:"0" }}%;">{{ review.prob_neg }}</div>
+                    </div>
+                    <a style="font-size: small; color: #ccc;">{{ review.review_date }}</a>
+                    <p>Sentiment Prediction: {{ review.sentiment_pred }}</p>
                 </div>
+                <!-- Display other review details here -->
+            </div>
             {% empty %}
-                <p>No reviews available.</p>
+            <p>No reviews available.</p>
             {% endfor %}
-            <h2>RECOMMEND FOR YOU</h2>
+            <!-- <h2>RECOMMEND FOR YOU</h2> -->
             <!-- Add/Edit Review (If user is logged in) -->
             {% if user.is_authenticated %}
             <div class="add-review">
@@ -49,7 +266,39 @@
             {% endif %}
         </div>
     </div>
+    <script>
+        // Retrieve the overall sentiment value (e.g., 'positive' or 'negative') from Django context
+        const totalPositive = {{ total_positive }};
+        const totalNegative = {{ total_negative }};
+
+    // Get the canvas element and create the chart context
+    const ctx = document.getElementById('sentimentChart').getContext('2d');
+
+    // Define the data for the pie chart
+    const data = {
+        labels: ['Positive', 'Negative'],
+        datasets: [{
+            data: [totalPositive, totalNegative],
+            backgroundColor: ['#4caf50', '#e50914'],
+            borderWidth: 0,
+        }]
+    };
+
+    // Define the options for the pie chart
+    const options = {
+        responsive: true,
+        maintainAspectRatio: false,
+    };
+
+    // Create the pie chart
+    new Chart(ctx, {
+        type: 'pie',
+        data: data,
+        options: options
+    });
+    </script>
 </body>
+
 </html>
 
 

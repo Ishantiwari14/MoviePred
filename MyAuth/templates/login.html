@@ -1,10 +1,105 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
+<style>
+  body{
+    background-image: url('{% static "1.jpg" %}');
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+    input[type="text"],
+     input[type="password"] {
+            /* background-color: lightgray;  */
+            width: 60%;
+            height: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 1em;
+            color: #f8fcff;
+            font-weight:400;
+            padding: 0 35px 0 18px;
+      }
+    .wrapper {
+    margin-top:20px;
+    margin-left:500px;
+    width: 320px;
+    height: 440px;
+    background: transparent;
+    border: 2px solid grey;
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 20px #808080;
+    align-items: center;
+    transition: height;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: transform .5s,height .2s ease;
+    }
+    .wrapper.active-popup {
+        transform: scale(1);
+    }
+    .wrapper.active {
+        height: 520px;
+    }
+    .wrapper .form-box {
+        width: 100%;
+        padding: 40px;
+    }
+
+.form-box h2 {
+    font-size: 2.5em;
+    color: #f8fcff;
+    text-align: center;
+    margin-top:-40px;
+}
+.form-box label {
+  display: block;
+  font-size: 1.3em;
+  color: #f8fcff;
+  font-weight:500;
+  margin-bottom: 10px;
+}
+button{
+  width: 90px;
+        height: 35px;
+        background: #E50914;
+        border: 1.5px solid #E50914;
+        outline: none;
+        border-radius: 14px;
+        cursor: pointer;
+        font-size: 1.2em;
+        color: #fff;
+        font-weight: 500;
+        margin-left: 120px;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        padding:8px 8px;
+        transition: 0.5s;
+}
+a{
+  color: aliceblue;
+ margin-top: 20px;
+} 
+.messages {
+      display: none;
+    }
+  </style>
+<body>
+  <div class="wrapper">
+    <div class ="form-box">
   <h2>Login</h2>
   <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Login</button>
+    <br/>
+    <a>Don't have an account yet?</a>
+    <a class="regis" href={% url 'register' %}>Register</a>
   </form>
+</div>
+  </div>
+  </body>
 {% endblock %}

@@ -1,89 +1,466 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Movie List</title>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+
     <style>
-       .card {
-    display: inline-block;
-    width: 200px;
-    margin: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    text-align: center;
-}
+        body {
+            
+            background-image: linear-gradient(to bottom, #000000, #303330);
+        }
 
-.card img {
-    max-width: 100%;
-    max-height: 200px;
-    object-fit: contain;
-}
+        .row {
+            display: flex;
+        }
 
-.movie-list {
-    display: flex;
-    flex-wrap: wrap;
-}
-form {
-    margin-bottom: 20px;
-}
+        .column {
+            flex: 1;
+            /* This will make each column take up equal space. Adjust as needed. */
+            padding: 10px;
 
-.movie-list {
-    display: flex;
-    flex-wrap: wrap;
-}
+        }
 
-.card {
-    display: inline-block;
-    width: 200px;
-    margin: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    text-align: center;
-}
+        /* .card {
+            display: inline-block;
+            width: 200px;
+            height: 400px;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #E50914;
+            text-align: center;
+        } */
 
+        .card img {
+            max-width: 300px;
+            max-height: 200px;
+            object-fit: cover;
+        }
+
+        .movie-list {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        .card {
+            display: inline-block;
+            width: 200px;
+            height: 300px;
+            margin: 10px;
+            padding: 7px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        
+        .description-box {
+            /* Tooltip-like box for the description */
+            display: none;
+                        position: absolute;
+            bottom: 100%;
+            /* Position the box above the card */
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            font-size: 14px;
+            width: 180px;
+            border-radius: 5px;
+            z-index: 1;
+        }
+
+        /* .card:hover {
+            Show the box on card hover
+            display:contents;
+        } */
+
+        .card h2 {
+            color: #9c3d3d;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        .card p {
+            color: #ccc;
+        }
+
+        .input-container {
+            position: relative;
+            margin: 30px auto;
+            width: 400px;
+        }
+
+        .input-container input[type="text"] {
+            font-size: 20px;
+            width: 100%;
+            border: none;
+            padding: 5px 0;
+            background-color: transparent;
+            color: #f3f1f1;
+            outline: none;
+        }
+
+
+        /* .input-container .underline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background-color: #f3f1f1;
+  transform: scaleX(0);
+  transition: all 0.3s ease;
+} */
+        /* button{
+  width: 120px;
+        height: 35px;
+        background: #E50914;
+        border: 1.5px solid #E50914;
+        outline: none;
+        border-radius: 14px;
+        cursor: pointer;
+        font-size: 1.2em;
+        color: #fff;
+        font-weight: 500;
+        margin-left: 120px;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        padding:8px 8px;
+        transition: 0.5s;
+} */
+        .movies-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .movies-list {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x:hidden;
+            scroll-behavior: smooth;
+            padding: 10px;
+        }
+       
+        .movies-listt {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x:hidden;
+            scroll-behavior: smooth;
+            padding: 10px;
+        }
+       
+        .card {
+            width: 250px;
+            margin-right: 10px;
+            /* Add other styles for the card container */
+        }
+
+        .card p {
+            color: #ccc;
+        }
+
+        /* Styling for the navigation buttons */
+        .navigation-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            backdrop-filter: blur(20px);
+            background-color: transparent;
+            color: #fff;
+            margin-top: 90px;
+            border-radius: 50%;
+            padding: 10px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .prev {
+            left: 20px;
+        }
+
+        .next {
+            right: 20px;
+        }
+        .prevv {
+            left: 20px;
+        }
+
+        .nextt {
+            right: 20px;
+        }
+
+        /* this is a recreation of twitter search in css */
+        .form {
+            --input-text-color: #fff;
+            --input-bg-color: #33393f;
+            --focus-input-bg-color: transparent;
+            --text-color: #949faa;
+            --active-color: #E50914;
+            --width-of-input: 350px;
+            --inline-padding-of-input: 1.2em;
+            --gap: 0.9rem;
+        }
+
+        /* form style */
+        .form {
+            font-size: 0.9rem;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            width: var(--width-of-input);
+            position: relative;
+            isolation: isolate;
+        }
+
+        /* a fancy bg for showing background and border when focus. */
+        .fancy-bg {
+            position: absolute;
+            width: 100%;
+            inset: 0;
+            background: var(--input-bg-color);
+            border-radius: 30px;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+        }
+
+        /* label styling */
+        label {
+            width: 100%;
+            padding: 0.8em;
+            height: 40px;
+            padding-inline: var(--inline-padding-of-input);
+            display: flex;
+            align-items: center;
+        }
+
+        .search,
+        .close-btn {
+            position: absolute;
+        }
+
+        /* styling search-icon */
+        .search {
+            fill: var(--text-color);
+            left: var(--inline-padding-of-input);
+        }
+
+        /* svg -- size */
+        svg {
+            width: 17px;
+            display: block;
+        }
+
+        /* styling of close button */
+        .close-btn {
+            border: none;
+            right: var(--inline-padding-of-input);
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            padding: 0.1em;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--active-color);
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* styling of input */
+        .input {
+            color: var(--input-text-color);
+            width: 100%;
+            margin-inline: min(2em, calc(var(--inline-padding-of-input) + var(--gap)));
+            background: none;
+            border: none;
+        }
+
+        .input:focus {
+            outline: none;
+        }
+
+        .input::placeholder {
+            color: var(--text-color)
+        }
+
+        /* input background change in focus */
+        .input:focus~.fancy-bg {
+            border: 1px solid var(--active-color);
+            background: var(--focus-input-bg-color);
+        }
+
+        /* search icon color change in focus */
+        .input:focus~.search {
+            fill: var(--active-color);
+        }
+
+        /* showing close button when typing */
+        .input:valid~.close-btn {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* this is for the default background in input,when selecting autofill options -- you can remove this code if you do not want to override the browser style.  */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            -webkit-transition: "color 9999s ease-out, background-color 9999s ease-out";
+            -webkit-transition-delay: 9999s;
+        }
     </style>
 </head>
+
 <body>
-    <h1>Movie List</h1>
-
-    <form method="GET" action="{% url 'index' %}">
-        <input type="text" name="query" value="{{ query }}" placeholder="Search movies">
-        <button type="submit">Search</button>
-    </form>
-
-    <div class="movie-list">
-        {% for movie in movies %}
-        <a href="{% url 'movie_details' movie.pk %}">
-            <div class="card">
-                <img src="{{ movie.medium_poster_url }}" alt="Movie Poster">
-                <h2>{{ movie.title }}</h2>
-                <p>{{ movie.description }}</p>
-                <!-- Add any other movie details you want to display -->
+    <div class="input-container">
+        <form method="GET" action="{% url 'index' %}" class="form">
+            <input type="text" name="query" value="{{ query }}" placeholder="Search movies" class="input">
+            <div class="fancy-bg"></div>
+            <div class="search">
+                <svg viewBox="0 0 24 24" aria-hidden="true"
+                    class="r-14j79pv r-4qtqp9 r-yyyyoo r-1xvli5t r-dnmrzs r-4wgw6l r-f727ji r-bnwqim r-1plcrui r-lrvibr">
+                    <g>
+                        <path
+                            d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z">
+                        </path>
+                    </g>
+                </svg>
             </div>
-        </a>
-        {% empty %}
-            <p>No movies found.</p>
-        {% endfor %}
-
-        {% if user.is_authenticated %}
-            <!-- Display additional list of movies for logged-in users -->
-            {% for moviees in recommend %}
-                <a href="{% url 'movie_details' moviees.pk %}">
+            <button class="close-btn" type="submit">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </form>
+        <div class="underline"></div>
+    </div>
+    <h1 style="color: #ccc;font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; font-weight: 100;">Movies List</h1>
+    <div class="movie-list">
+        <div class="movies-container">
+            <div class="movies-list">
+                {% for movie in movies %}
+                <a href="{% url 'movie_details' movie.pk %}">
                     <div class="card">
-                        <img src="{{ logged_in_movie.medium_poster_url }}" alt="Movie Poster">
-                        <h2>{{ moviees.title }}</h2>
-                        <p>{{ moviees.description }}</p>
+                        <img src="{{ movie.medium_poster_url }}" alt="Movie Poster">
+                        <h2>{{ movie.title }}</h2>
+                        <div class="description-box">
+                            <p>{{ moviees.description }}</p>
+                        </div>
                         <!-- Add any other movie details you want to display -->
                     </div>
                 </a>
-            {% empty %}
+                {% empty %}
+                <p>No movies found.</p>
+                {% endfor %}
+            </div>
+            <button class="navigation-button prev">◀</button>
+            <button class="navigation-button next">▶</button>
+        </div>
+        
+        {% if user.is_authenticated %}
+        <h1 style="color: #ccc;font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; font-weight: 100;">Top picks for you</h1>
+        <div class="movies-container">
+            <div class="movies-listt">
+                
+                <!-- Display additional list of movies for logged-in users -->
+                {% for moviees in recommend %}
+                <a href="{% url 'movie_details' moviees.pk %}">
+                    <div class="card">
+                        <img src="{{ moviees.medium_poster_url }}" alt="Movie Poster">
+                        <h2>{{ moviees.title }}</h2>
+                        <div class="description-box">
+                       <p>{{ moviees.description }}</p>
+                       </div>
+                        <!-- Add any other movie details you want to display -->
+                    </div>
+                </a>
+                {% empty %}
                 <p>No additional movies found for logged-in users.</p>
-            {% endfor %}
+                {% endfor %}
+                
+            </div>
+            <button class="navigation-button prevv">◀</button>
+            <button class="navigation-button nextt">▶</button>
+        </div>
         {% endif %}
     </div>
+    <script>
+        const moviesList = document.querySelector('.movies-list');
+        const prevButton = document.querySelector('.navigation-button.prev');
+        const nextButton = document.querySelector('.navigation-button.next');
+        let scrollPosition = 0;
+
+        prevButton.addEventListener('click', () => {
+            scrollPosition -= 300; // Adjust the scrolling distance as needed
+            moviesList.scrollTo({
+                left: scrollPosition,
+                behavior: 'smooth',
+            });
+        });
+
+        nextButton.addEventListener('click', () => {
+            scrollPosition += 300; // Adjust the scrolling distance as needed
+            moviesList.scrollTo({
+                left: scrollPosition,
+                behavior: 'smooth',
+            });
+        });
+    </script>
+     <script>
+        const moviesListt = document.querySelector('.movies-listt');
+        const prevButtonn = document.querySelector('.navigation-button.prevv');
+        const nextButtonn = document.querySelector('.navigation-button.nextt');
+        let scrollPositionn = 0;
+
+        prevButtonn.addEventListener('click', () => {
+            scrollPositionn -= 300; // Adjust the scrolling distance as needed
+            moviesListt.scrollTo({
+                left: scrollPositionn,
+                behavior: 'smooth',
+            });
+        });
+
+        nextButtonn.addEventListener('click', () => {
+            scrollPositionn += 300; // Adjust the scrolling distance as needed
+            moviesListt.scrollTo({
+                left: scrollPositionn,
+                behavior: 'smooth',
+            });
+        });
+    </script>
+
+
 </body>
+<!--------js for toggle menu------>
+<script>
+    var MenuItems = document.getElementById("MenuItems");
+
+    MenuItems.style.maxHeight = "0px";
+
+    function menutoggle() {
+        if (MenuItems.style.maxHeight == "0px") {
+            MenuItems.style.maxHeight == "200px";
+        }
+        else {
+            MenuItems.style.maxHeight == "0px";
+        }
+    }
+</script>
+
+
 </html>
 
 {% endblock %}
