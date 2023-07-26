@@ -8,6 +8,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
 from .models import UserProfile
 from django.http import Http404
+from rest_framework.parsers import MultiPartParser, FormParser
 
 # class MyObtainTokenPairView(TokenObtainPairView):
 #     permission_classes = (permissions.AllowAny, )
@@ -32,6 +33,7 @@ class UserProfileView(generics.RetrieveAPIView):
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (permissions.AllowAny, )
+    parser_classes = (MultiPartParser, FormParser)
     serializer_class = RegisterSerializer
 
 class ChangePasswordView(generics.UpdateAPIView):
